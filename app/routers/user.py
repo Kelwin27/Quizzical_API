@@ -14,6 +14,10 @@ def create_user(user: shemas.UserCreate, db: Session = Depends(get_db)):
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
 
+    exist_user = db.query(models.Users).filter(models.Users.username == user.username).first()
+    if exist_user:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="User alrady exist")
+        
     new_user = models.Users(**user.dict())
 
     db.add(new_user)
