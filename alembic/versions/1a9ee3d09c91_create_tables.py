@@ -1,8 +1,8 @@
 """create tables
 
-Revision ID: 352a2f086418
+Revision ID: 1a9ee3d09c91
 Revises: 
-Create Date: 2023-02-12 15:29:26.539707
+Create Date: 2023-02-13 17:01:54.492899
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '352a2f086418'
+revision = '1a9ee3d09c91'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
+    sa.Column('userrole', sa.String(), nullable=False),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
@@ -32,7 +33,7 @@ def upgrade() -> None:
     sa.Column('correct_answer', sa.String(), nullable=False),
     sa.Column('incorrect_answers', sa.ARRAY(sa.String()), nullable=False),
     sa.Column('category', sa.String(), nullable=False),
-    sa.Column('type', sa.String(), nullable=False),
+    sa.Column('author', sa.String(), nullable=False),
     sa.Column('difficulty', sa.String(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ondelete='CASCADE'),

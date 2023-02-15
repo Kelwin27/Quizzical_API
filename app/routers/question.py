@@ -1,3 +1,4 @@
+from random import choice
 from fastapi import FastAPI, HTTPException, Depends, Response, status, APIRouter
 from .. import shemas, models, oauth2
 from ..database import get_db
@@ -10,10 +11,17 @@ router = APIRouter(
     )
 
 @router.get("/", response_model=List[shemas.SendQuestion])
-def get_questions(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), 
-limit: int = 5, skip: int = 0, search: Optional[str] = ""):
+def get_questions(db: Session = Depends(get_db), 
+#  current_user: int = Depends(oauth2.get_current_user), 
+limit: int = 5, dif: Optional[str] = "", search: Optional[str] = ""):
 
-    questions = db.query(models.Question).filter(models.Question.category.contains(search)).limit(limit).offset(skip).all()
+
+    questions_query = db.query(models.Question).filter(models.Question.category.contains(search), models.Question.difficulty.contains(dif)).all()
+    questions = []
+    while len(questions) < limit:
+        variant = choice(questions_query)
+        if variant not in questions:
+            questions.append(variant)
     return questions
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=shemas.SendQuestion)

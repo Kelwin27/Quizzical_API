@@ -5,6 +5,7 @@ from datetime import datetime
 class UserCreate(BaseModel):
     username : str
     password : str
+    userrole : str = "user"
 
 class UserOut(BaseModel):
     username : str
@@ -19,7 +20,6 @@ class Questions(BaseModel):
     correct_answer : str
     incorrect_answers : list
     category : str
-    type : str
     difficulty : str
 
 class SendQuestion(Questions):
